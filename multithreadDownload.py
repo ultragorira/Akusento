@@ -1,6 +1,6 @@
 # Author: Loris De Luca
-# Prerequisite: pip install , selenium. Chromedriver.exe available in utils
-# Script to download audios for projects in the Arabic collection
+# Prerequisite: pip install , selenium. 
+# Script to download audios in multithread
 
 from selenium import webdriver
 from selenium.common.exceptions import *
@@ -9,13 +9,14 @@ import time
 import os
 from pathlib import Path
 import shutil, subprocess, threading
+import chromedriver_autoinstaller
 
 
 workingFolder = os.path.dirname(__file__)
 downloadFolder = str(Path.home() / 'Downloads')
 ffmpegLoc = 'utils/ffmpeg.exe'
-USERNAME = 'lb.apollo.project@gmail.com'
-PASSWORD = 'Admin001!!'
+USERNAME = os.environ.get('AI_ACCOUNT')
+PASSWORD = os.environ.get('AI_PASSWORD')
 urls = []
 keys = [] 
 ids = []
@@ -33,27 +34,28 @@ def hackSaas():
 
 
     #print('Hacking SaaS...')
-    accessWebPages(USERNAME, PASSWORD,ids, keys, urls)
+    accessWebPages(ids, keys, urls)
 
     
 
-def accessWebPages(login_mail, login_pw, ids, keys, URLs):  
-
+def accessWebPages(ids, keys, URLs):  
+    chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
+                                      # and if it doesn't exist, download it automatically,
+                                      # then add chromedriver to path
     options = webdriver.ChromeOptions()
-    #disabling terminal msg where selenium instance is listening
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    driver = webdriver.Chrome(os.path.join(workingFolder,'utils','chromedriver.exe'), options=options)
-
-    page_LoadedCorrectly = True
+    driver = webdriver.Chrome(options=options)
+    driver.get("http://www.python.org")
+    assert "Python" in driver.title
     #Accesing SaaS
-    driver.get("https://ai.lionbridge.com/")
+    driver.get("https://www.telusinternational.ai/")
     time.sleep(5)
 
     #Insert Creds
-    login_form_email = driver.find_element_by_xpath('//*[@id="root"]/div[1]/div[2]/form/div/input').send_keys(login_mail)
+    login_form_email = driver.find_element_by_name('username').send_keys(USERNAME)
     continue_btn = driver.find_element_by_xpath('//*[@id="root"]/div[1]/div[2]/form/button').click()
     time.sleep(2)
-    login_form_pw = driver.find_element_by_name("password").send_keys(login_pw)
+    login_form_pw = driver.find_element_by_name("password").send_keys(PASSWORD)
     signin_bt = driver.find_element_by_xpath('//*[@id="root"]/div[1]/div[2]/form/button').click()
     time.sleep(3)
     

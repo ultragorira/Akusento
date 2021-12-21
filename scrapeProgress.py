@@ -28,8 +28,8 @@ assert "Python" in driver.title
 base_dir = os.path.dirname(__file__)
 list_recording_completion = []
 list_questionnaire_completion = []
-username = os.environ.get('AI_ACCOUNT')
-password = os.environ.get('AI_PASSWORD')
+USERNAME = os.environ.get('AI_ACCOUNT')
+PASSWORD = os.environ.get('AI_PASSWORD')
 
 def pushToGSheet(progress_list, locale):
 
@@ -71,10 +71,10 @@ def accessWebPages(URLs, locale):
     time.sleep(5)
 
     #Insert Creds
-    login_form_email = driver.find_element_by_name('username').send_keys(username)
+    login_form_email = driver.find_element_by_name('username').send_keys(USERNAME)
     continue_btn = driver.find_element_by_xpath('//*[@id="root"]/div[1]/div[2]/form/button').click()
     time.sleep(2)
-    login_form_pw = driver.find_element_by_name('password').send_keys(password)
+    login_form_pw = driver.find_element_by_name('password').send_keys(PASSWORD)
     signin_bt = driver.find_element_by_xpath('//*[@id="root"]/div[1]/div[2]/form/button').click()
     time.sleep(3)
 
