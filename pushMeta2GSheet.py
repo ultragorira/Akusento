@@ -39,6 +39,12 @@ def pushToGSheet(location, questionnaire):
     column15 = []
     column16 = []
     column17 = []
+    column18 = []
+    column19 = []
+    column20 = []
+    column21 = []
+    column22 = []
+    column23 = []
 
     for audio in files:
         media_info = MediaInfo.parse(os.path.join(location,audio))
@@ -61,6 +67,12 @@ def pushToGSheet(location, questionnaire):
                 column15.append(Cell(row,15, value=''.join('en-US')))
                 column16.append(Cell(row,19, value=''.join('en')))
                 column17.append(Cell(row,20, value=''.join('Default Audio Device')))
+                column18.append(Cell(row,43, value=''.join(responses[0][0])))
+                column19.append(Cell(row,44, value=''.join(responses[0][1])))
+                column20.append(Cell(row,45, value=''.join(responses[0][2])))
+                column21.append(Cell(row,46, value=''.join(responses[0][3])))
+                column22.append(Cell(row,47, value=''.join(responses[0][4])))
+                column23.append(Cell(row,48, value=''.join(responses[0][5])))
 
             
                 row += 1  
@@ -84,6 +96,12 @@ def pushToGSheet(location, questionnaire):
     sheet.update_cells(column15)
     sheet.update_cells(column16)
     sheet.update_cells(column17)
+    sheet.update_cells(column18)
+    sheet.update_cells(column19)
+    sheet.update_cells(column20)    
+    sheet.update_cells(column21)
+    sheet.update_cells(column22)
+    sheet.update_cells(column23)
 
     print('### 終わった - Owatta! ###') 
 
