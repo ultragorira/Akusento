@@ -139,7 +139,7 @@ def accessWebPages():
 
     #Create projects in bulk one after the other
     
-    for idx in range (0, 2):
+    for idx in range (0, 299):
         time.sleep(2)
         driver.get('https://www.telusinternational.ai/home/projects/61dec4d9b3f90b51289f5ebf')
         addMoreprojects(FILE, str(idx+1).zfill(3)+'L')

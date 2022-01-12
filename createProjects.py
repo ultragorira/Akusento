@@ -71,7 +71,7 @@ def addMoreprojects(newCSV, isFirstProj):
         new_proj_language = driver.find_element_by_xpath('//*[@id="react-select-3-input"]').send_keys(Keys.ENTER)
         time.sleep(4)
 
-        save_submit_bt = driver.find_element_by_xpath('//button[contains(text(), "Save and continue")]').click() 
+        save_submit_bt = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/form/div/div[1]/div[1]/div/div/div[2]/button[2]').click() 
     else:
         while True:
             try:
@@ -93,7 +93,7 @@ def addMoreprojects(newCSV, isFirstProj):
                 time.sleep(2)
         
         time.sleep(2)
-        save_submit_bt = driver.find_element_by_xpath('//button[contains(text(), "Save and continue")]').click() 
+        save_submit_bt = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/form/div/div[1]/div[1]/div/div/div[2]/button[2]').click() 
 
     #Appending titles to populate Excel with dump of projects
     list_titles.append(str('[116 - Accents] ' + newCSV.split('\\')[-1].replace('_',' ').replace('.csv','')))    
@@ -120,13 +120,13 @@ def addMoreprojects(newCSV, isFirstProj):
 
     while True:
         try:
-            upload_bt = driver.find_element_by_xpath('//button[contains(text(), "Upload")]').click()
+            upload_bt = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/div/div[2]/div/div/div[3]/div[2]/div[2]/div[2]/button').click()
             break
         except ElementClickInterceptedException:
             print('Upload btn not found for some reason') 
     
     time.sleep(2)
-    start_proj_bt = driver.find_element_by_xpath('//button[contains(text(), "Start project")]').click() 
+    start_proj_bt = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/div/div[1]/div[1]/div/div/div[2]/button').click() 
         
     time.sleep(2)
     open_settings = driver.find_element_by_xpath('//*[@id="dropdown-action"]').click()
