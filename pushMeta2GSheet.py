@@ -8,7 +8,7 @@ import functions as general_functions
 import pandas as pd
 
 
-def pushToGSheet(location, questionnaire):
+def pushToGSheet(location, questionnaire, recordings):
     #Google Sheet
     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/spreadsheets','https://www.googleapis.com/auth/drive.file','https://www.googleapis.com/auth/drive']
     creds = ServiceAccountCredentials.from_json_keyfile_name("Bot_Creds.json", scope)
@@ -18,7 +18,7 @@ def pushToGSheet(location, questionnaire):
 
     list_questionnaire = pd.read_csv(questionnaire)
     responses = list(zip(list_questionnaire['output1'],list_questionnaire['output2'], list_questionnaire['output3'], list_questionnaire['output4'], list_questionnaire['output5'], list_questionnaire['output6']))
-    #print(responses)
+    recording_details = pd.read_csv(recordings)['output1'][0].split(';')
     files = [f for f in os.listdir(location) if os.path.isfile(os.path.join(location,f))]
 
     row = 2
@@ -45,6 +45,9 @@ def pushToGSheet(location, questionnaire):
     column21 = []
     column22 = []
     column23 = []
+    column24 = []
+    column25 = []
+    column26 = []
 
     for audio in files:
         media_info = MediaInfo.parse(os.path.join(location,audio))
@@ -67,12 +70,15 @@ def pushToGSheet(location, questionnaire):
                 column15.append(Cell(row,15, value=''.join('en-US')))
                 column16.append(Cell(row,19, value=''.join('en')))
                 column17.append(Cell(row,20, value=''.join('Default Audio Device')))
-                column18.append(Cell(row,43, value=''.join(responses[0][0])))
-                column19.append(Cell(row,44, value=''.join(responses[0][1])))
-                column20.append(Cell(row,45, value=''.join(responses[0][2])))
-                column21.append(Cell(row,46, value=''.join(responses[0][3])))
-                column22.append(Cell(row,47, value=''.join(responses[0][4])))
-                column23.append(Cell(row,48, value=''.join(responses[0][5])))
+                column18.append(Cell(row,33, value=''.join(recording_details[8].upper() if len(recording_details) == 10 else recording_details[5])))
+                column19.append(Cell(row,36, value=''.join(recording_details[7].split(' ')[0] if len(recording_details) == 10 else recording_details[4].split(' ')[0])))
+                column20.append(Cell(row,43, value=''.join(responses[0][0])))
+                column21.append(Cell(row,44, value=''.join(responses[0][1])))
+                column22.append(Cell(row,45, value=''.join(responses[0][2])))
+                column23.append(Cell(row,46, value=''.join(responses[0][3])))
+                column24.append(Cell(row,47, value=''.join(responses[0][4])))
+                column25.append(Cell(row,48, value=''.join(responses[0][5])))
+                column26.append(Cell(row,49, value=''.join(recording_details[9] if len(recording_details) == 10 else recording_details[6])))
 
             
                 row += 1  
@@ -102,6 +108,9 @@ def pushToGSheet(location, questionnaire):
     sheet.update_cells(column21)
     sheet.update_cells(column22)
     sheet.update_cells(column23)
+    sheet.update_cells(column24)
+    sheet.update_cells(column25)
+    sheet.update_cells(column26)
 
     print('### 終わった - Owatta! ###') 
 
@@ -109,7 +118,8 @@ def getMediaInfo():
 
     workingFolder = input('Provide Loc of audio files: ')
     questionnaire = input('Provide the questionnaire CSV: ')
-    pushToGSheet(workingFolder, questionnaire)
+    recordings = input('Provide the CSV of the recordings: ')
+    pushToGSheet(workingFolder, questionnaire, recordings)
 
 
 # Run the file standalone.
