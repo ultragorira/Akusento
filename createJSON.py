@@ -64,6 +64,7 @@ def create_JSONS(full_data):
     data['additionalMetadata']['distance'] = full_data['distance'][rownum+1]
     data['additionalMetadata']['backgroundCondition'] = full_data['backgroundCondition'][rownum+1]
     data['additionalMetadata']['operatingSystem'] = full_data['operatingSystem'][rownum+1]
+    data['additionalMetadata']['backgroundNoise'] = full_data['backgroundNoise'][rownum+1]
     data['additionalMetadata']['speechType'] = str(full_data['speechType'][rownum+1]).rstrip()
     data['additionalMetadata']['accentLevel'] = full_data['accentLevel'][rownum+1]
     data['additionalMetadata']['surveyQuestion1'] = full_data['surveyQuestion1'][rownum+1]
