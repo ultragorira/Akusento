@@ -118,10 +118,6 @@ def addMoreprojects(newCSV, idx):
     time.sleep(2)
     start_proj_bt = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/div/div[1]/div[1]/div/div/div[2]/button').click() 
         
-    time.sleep(2)
-    open_settings = driver.find_element_by_xpath('//*[@id="dropdown-action"]').click()
-    time.sleep(1)
-    clone_btn = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/div/div[1]/div[1]/div/div/div[2]/div/div/a[1]').click()
 
 def accessWebPages():    
     FILE = r'C:\Scripts\Akusento\template.csv'
@@ -139,7 +135,7 @@ def accessWebPages():
 
     #Create projects in bulk one after the other
     
-    for idx in range (0, 299):
+    for idx in range (0, 199):
         time.sleep(2)
         driver.get('https://www.telusinternational.ai/home/projects/61dec4d9b3f90b51289f5ebf')
         addMoreprojects(FILE, str(idx+1).zfill(3)+'L')
