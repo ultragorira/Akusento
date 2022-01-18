@@ -93,7 +93,12 @@ def addMoreprojects(newCSV, isFirstProj):
                 time.sleep(2)
         
         time.sleep(2)
-        save_submit_bt = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/form/div/div[1]/div[1]/div/div/div[2]/button[2]').click() 
+        while True:
+            try:
+                save_submit_bt = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/form/div/div[1]/div[1]/div/div/div[2]/button[2]').click() 
+            except NoSuchElementException:
+                print('Could not find the save submit btn')
+                time.sleep(1)
 
     #Appending titles to populate Excel with dump of projects
     list_titles.append(str('[116 - Accents] ' + newCSV.split('\\')[-1].replace('_',' ').replace('.csv','')))    
@@ -126,13 +131,20 @@ def addMoreprojects(newCSV, isFirstProj):
             print('Upload btn not found for some reason') 
     
     time.sleep(2)
-    start_proj_bt = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/div/div[1]/div[1]/div/div/div[2]/button').click() 
-        
-    time.sleep(2)
-    open_settings = driver.find_element_by_xpath('//*[@id="dropdown-action"]').click()
-    time.sleep(1)
-    clone_btn = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/div/div[1]/div[1]/div/div/div[2]/div/div/a[1]').click()
-
+    while True:
+        try:
+            start_proj_bt = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/div/div[1]/div[1]/div/div/div[2]/button').click()  
+            time.sleep(2)
+        except NoSuchElementException:
+            print('Cannot find start proj button')
+    while True:
+        try:
+            open_settings = driver.find_element_by_xpath('//*[@id="dropdown-action"]').click()
+            time.sleep(1)
+            clone_btn = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/div/div[1]/div[1]/div/div/div[2]/div/div/a[1]').click()
+        except NoSuchElementException:
+            print('Issues when cloning')
+            
 def accessWebPages():    
     #Accesing SaaS
     driver.get("https://www.telusinternational.ai/")
