@@ -45,8 +45,8 @@ def pushToGSheet(progress_list, locale):
     row = 2
 
     for y in progress_list:
-        column_progress.append(Cell(row,5, value=''.join(y[0])))
-        column_progress.append(Cell(row,6, value=''.join(y[1])))
+        column_progress.append(Cell(row,6, value=''.join(y[0])))
+        column_progress.append(Cell(row,7, value=''.join(y[1])))
         row += 1  
                 
         
