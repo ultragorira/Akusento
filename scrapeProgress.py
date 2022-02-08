@@ -13,7 +13,7 @@ import chromedriver_autoinstaller
 
 JSON_creds = 'Bot_Creds.json'
 Gsheet_UK = '116_EN_UK_Accents'
-Gsheet_US = 'Test_116_EN_US_Accents'
+Gsheet_US = '116_EN_US_Accents'
 work_sheet = 'Projects_Allocation'
 
 chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists

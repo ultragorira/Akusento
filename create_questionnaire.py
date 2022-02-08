@@ -58,10 +58,16 @@ def addMoreprojects(newCSV, idx):
 
     projectName = str(f'[116 - Accents] {idx} - Questionnaire')
     time.sleep(2)
-    open_settings = driver.find_element_by_xpath('//*[@id="dropdown-action"]').click()
-    time.sleep(1)
-    clone_btn = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/div/div[1]/div[1]/div/div/div[2]/div/div/a[1]').click()
-    time.sleep(3)
+    while True:
+        try:
+            open_settings = driver.find_element_by_xpath('//*[@id="dropdown-action"]').click()
+            time.sleep(1)
+            clone_btn = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/div/div[1]/div[1]/div/div/div[2]/div/div/a[1]').click()
+            time.sleep(3)
+            break
+        except NoSuchElementException:
+            print('Did not button to clone...')
+            time.sleep(2)
     while True:
         try:
             new_proj_title_txtbox = driver.find_element_by_xpath('//*[@id="projectName"]').send_keys(Keys.CONTROL + 'a')
@@ -135,7 +141,7 @@ def accessWebPages():
 
     #Create projects in bulk one after the other
     
-    for idx in range (0, 199):
+    for idx in range (93, 199):
         time.sleep(2)
         driver.get('https://www.telusinternational.ai/home/projects/61dec4d9b3f90b51289f5ebf')
         addMoreprojects(FILE, str(idx+1).zfill(3)+'L')

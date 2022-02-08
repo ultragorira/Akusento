@@ -26,7 +26,7 @@ base_dir = os.path.dirname(__file__)
 workingFolder = base_dir + r'\files'
 list_titles = []
 list_urls = []
-guidelines_desc = 'Read the task provided to you by email. For each item, there will be instructions between []. Do not record those instructions, they are there just to guide you through the task.' 
+guidelines_desc = 'Read the task provided to you by email. When recording make sure the background is silent.' 
 USERNAME = os.environ.get('AI_ACCOUNT')
 PASSWORD = os.environ.get('AI_PASSWORD')
 
@@ -96,6 +96,7 @@ def addMoreprojects(newCSV, isFirstProj):
         while True:
             try:
                 save_submit_bt = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/form/div/div[1]/div[1]/div/div/div[2]/button[2]').click() 
+                break
             except NoSuchElementException:
                 print('Could not find the save submit btn')
                 time.sleep(1)
@@ -135,6 +136,7 @@ def addMoreprojects(newCSV, isFirstProj):
         try:
             start_proj_bt = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/div/div[1]/div[1]/div/div/div[2]/button').click()  
             time.sleep(2)
+            break
         except NoSuchElementException:
             print('Cannot find start proj button')
     while True:
@@ -142,6 +144,7 @@ def addMoreprojects(newCSV, isFirstProj):
             open_settings = driver.find_element_by_xpath('//*[@id="dropdown-action"]').click()
             time.sleep(1)
             clone_btn = driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/div/div[1]/div[1]/div/div/div[2]/div/div/a[1]').click()
+            break
         except NoSuchElementException:
             print('Issues when cloning')
             
