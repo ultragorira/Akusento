@@ -86,25 +86,27 @@ def accessWebPages(URLs, locale):
 
 def scrapeProject(input_url):
 
-    if input_url[0] > 0 and input_url[5] != 'Complete' and input_url[5] != 'Complete Only Rec':
+    if input_url[0] !='' and input_url[5] != 'Complete' and input_url[5] != 'Complete Only Rec':
         while True:
             try:
                 driver.get(input_url[1])
                 print('Opening project..' + input_url[1])
                 time.sleep(5)
                 list_recording_completion.append(driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/div/div[2]/div[1]/div/div/div/div[2]/div[1]/div[1]/div[2]').text)
+                current_status = list_recording_completion[-1]
                 break
             except NoSuchElementException:
                 print('Reloading ' + input_url[1])
-        while True:
-            try:
-                print('Downloading CSV for you pal..')
-                complete_data_btn = driver.find_element_by_xpath('//*[@id="all"]').click()
-                time.sleep(2)
-                csv_btn = driver.find_element_by_class_name('dropdown-item').click()
-                break
-            except NoSuchElementException:
-                print('Retrying to download CSV')
+        if current_status == '100%':
+            while True:
+                try:
+                    print('Downloading CSV for you pal..')
+                    complete_data_btn = driver.find_element_by_xpath('//*[@id="all"]').click()
+                    time.sleep(2)
+                    csv_btn = driver.find_element_by_class_name('dropdown-item').click()
+                    break
+                except NoSuchElementException:
+                    print('Retrying to download CSV')
         while True:
             try:
                 driver.get(input_url[2])
@@ -114,7 +116,7 @@ def scrapeProject(input_url):
                 break
             except NoSuchElementException:
                 print('Reloading ' + input_url[2])
-    elif input_url[0] > 0:
+    elif input_url[0] != '':
         if input_url[3] == '100%':
             list_recording_completion.append('100%')
         else:
