@@ -11,9 +11,10 @@ soxLocation = os.environ.get('SOX_LOCATION')
 
 #####################################################################################
 #SOX convertion
-def runSOX():
-     
-    path = input('Add the path: ')
+def runSOX(path=None):
+
+    if path==None: 
+        path = input('Add the path: ')
      
     for root, dirs, files in os.walk(path):
         rootMain = pathlib.PurePath(root).parts[-1:] 
