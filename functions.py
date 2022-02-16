@@ -38,6 +38,8 @@ def calcEpoch(timeFromMediaInfo):
 
 def move_files(from_location, to_location, type='Download'):
     
+    files_to_download = []
+
     if type=='Download':
         today = str(datetime.today()).split()[0]
         for files in os.listdir(from_location):
@@ -46,6 +48,20 @@ def move_files(from_location, to_location, type='Download'):
                 destination_folder = os.path.join(to_location, files.split('-')[4][2:])
                 if str(time_format.tm_year)+'-'+str(time_format.tm_mon).zfill(2)+'-'+str(time_format.tm_mday) == today:
                     shutil.move(os.path.join(from_location,files), destination_folder)
+                    #Saving the list of files to then launch multithread download
+                    files_to_download.append(os.path.join(destination_folder, files))
                     output = '/'.join(destination_folder.split('\\')[6:9])
                     print(f'Moved file {files} to {output}')
+    elif type=='Upload_Sox':
+        for files in os.listdir(from_location):
+            shutil.move(os.path.join(from_location,files), to_location)
+    elif type=='Upload_Original':
+        for files in os.listdir(from_location):
+            if int(files[:3]) <= 56:
+                shutil.move(os.path.join(from_location,files), os.path.join(to_location,'US', '_Move_here_after_SOX'))
+            else:
+                shutil.move(os.path.join(from_location,files), os.path.join(to_location,'UK', '_Move_here_after_SOX'))
+    if type=='Download':
+        return (files_to_download)
+
 
