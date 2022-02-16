@@ -9,7 +9,7 @@ import gspread
 from gspread.models import Cell
 from oauth2client.service_account import ServiceAccountCredentials
 from functions import move_files
-from scheduled_multithreadDownload import call_multiple_threads
+from full_multithreadDownload import call_multiple_threads
 from SOX import runSOX
 from paths import targetFolder, Sox_targetFolder,Audio_targetFolder
 from pathlib import Path
