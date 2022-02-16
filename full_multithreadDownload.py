@@ -142,7 +142,3 @@ def call_multiple_threads(list_of_files):
     global files 
     files = list_of_files
     runThreads(len(files))
-
-# Run as standalone.
-if __name__=="__main__":
-    runThreads()
