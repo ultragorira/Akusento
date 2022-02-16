@@ -11,13 +11,14 @@ from oauth2client.service_account import ServiceAccountCredentials
 from move_files import move_files
 from scheduled_multithreadDownload import call_multiple_threads
 from SOX import runSOX
+from paths import targetFolder, Sox_targetFolder,Audio_targetFolder
 from pathlib import Path
 from selenium import webdriver
 import chromedriver_autoinstaller
 
 JSON_creds = 'Bot_Creds.json'
-Gsheet_UK = 'Test_116_EN_UK_Accents'
-Gsheet_US = 'Test_116_EN_US_Accents'
+Gsheet_UK = 'Tech_116_EN_UK_Accents'
+Gsheet_US = 'Tech_116_EN_US_Accents'
 work_sheet = 'Projects_Allocation'
 
 chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
@@ -37,8 +38,6 @@ USERNAME = os.environ.get('AI_ACCOUNT')
 PASSWORD = os.environ.get('AI_PASSWORD')
 
 downloadFolder = str(Path.home() / 'Downloads')
-targetFolder = '\\\\tre-s-file01\\Customers\\Amazon\\116_Lab126_Accented_speakers_collection_US_UK\\Production\\___CSV__Download\\' 
-
 
 def pushToGSheet(progress_list, locale):
 
@@ -63,7 +62,9 @@ def pushToGSheet(progress_list, locale):
     sheet.update_cells(column_progress)
     print('#####GSHEET UPLOADED#####')
 
-
+    list_recording_completion.clear()
+    list_questionnaire_completion.clear()
+    dates.clear()
 
 def getLiveData():
     locale = ['US', 'UK']
@@ -119,7 +120,6 @@ def scrapeProject(input_url):
                 print('Opening project..' + input_url[1])
                 time.sleep(5)
                 list_recording_completion.append(driver.find_element_by_xpath('//*[@id="root"]/div[1]/main/div/div[2]/div[1]/div/div/div/div[2]/div[1]/div[1]/div[2]').text)
-                dates.append(str(datetime.today()).split()[0])
                 current_status = list_recording_completion[-1]
                 break
             except NoSuchElementException:
@@ -131,9 +131,12 @@ def scrapeProject(input_url):
                     complete_data_btn = driver.find_element_by_xpath('//*[@id="all"]').click()
                     time.sleep(2)
                     csv_btn = driver.find_element_by_class_name('dropdown-item').click()
+                    dates.append(str(datetime.today()).split()[0])
                     break
                 except NoSuchElementException:
                     print('Retrying to download CSV')
+        else:
+            dates.append(str(input_url[6]))
         while True:
             try:
                 driver.get(input_url[2])
@@ -164,7 +167,7 @@ def scrapeProject(input_url):
     else:
         list_recording_completion.append('0%')
         list_questionnaire_completion.append('0%')
-        dates.append('')
+        dates.append(str(input_url[6]))
  
     return(zip(list_recording_completion, list_questionnaire_completion, dates))
 
