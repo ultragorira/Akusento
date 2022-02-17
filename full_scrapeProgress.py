@@ -87,7 +87,7 @@ def getLiveData():
     print('Soxing Files')
     runSOX('./Downloaded')
     #Move SOXed files to Server
-    move_files('.FilesSoxed', Sox_targetFolder, type='Upload_Sox')
+    move_files('FilesSoxed', Sox_targetFolder, type='Upload_Sox')
     print('Soxed files pushed to server')
     #Move Originals to Server
     move_files('Downloaded', Audio_targetFolder, type='Upload_Original')
