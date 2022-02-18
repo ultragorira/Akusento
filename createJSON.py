@@ -46,8 +46,8 @@ def create_JSONS(full_data):
     data['sessionInfo']['languageSpokenDaily'] = full_data['languageSpokenDaily'][rownum]
     data['sessionInfo']['primaryMicrophone'] = full_data['primaryMicrophone'][rownum]
     data['transcription'] = {}
-    data['transcription']['domain'] = full_data['domain'][rownum]
-    data['transcription']['id'] = str(full_data['id'][rownum])
+    data['transcription']['domain'] = full_data['domain'][rownum] if full_data['domain'][rownum] != '' else 'null'
+    data['transcription']['id'] = str(full_data['id'][rownum]).zfill(2)
     data['transcription']['phrase'] = full_data['phrase'][rownum]
     data['transcription']['annotation'] = full_data['annotation'][rownum]
     data['transcription']['startEndpoint'] = full_data['startEndpoint'][rownum]
@@ -55,7 +55,7 @@ def create_JSONS(full_data):
     data['transcription']['type'] = full_data['type'][rownum]
     data['transcription']['qualityChecks'] = {}
     data['transcription']['wakeword'] = full_data['wakeword'][rownum]
-    data['transcription']['intent'] = full_data['intent'][rownum]
+    data['transcription']['intent'] = full_data['intent'][rownum] if full_data['intent'][rownum] != '' else 'null'
     data['additionalMetadata'] = {}
     data['additionalMetadata']['phoneModel'] = full_data['phoneModel'][rownum]
     data['additionalMetadata']['phoneBrand'] = full_data['phoneBrand'][rownum]
@@ -99,7 +99,7 @@ def read_data_from_gspread():
   df = pd.DataFrame(sheet.get_all_records())
   #Filtering the dataframe by only the ID interested in
   df_by_id = df.loc[df['audioFileName'].str.contains(str(id_participant), case=False)]
-  create_JSONS(df_by_id)
+  create_JSONS(df_by_id.reset_index())
 
 if __name__ == '__main__':
   read_data_from_gspread()
