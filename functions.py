@@ -39,9 +39,8 @@ def calcEpoch(timeFromMediaInfo):
 def move_files(from_location, to_location, type='Download'):
     
     files_to_download = []
-
+    today = str(datetime.today()).split()[0]
     if type=='Download':
-        today = str(datetime.today()).split()[0]
         for files in os.listdir(from_location):
             if files.endswith('.csv') and 'Accents' in files:
                 time_format = time.gmtime(os.path.getmtime(os.path.join(from_location,files)))
@@ -61,7 +60,15 @@ def move_files(from_location, to_location, type='Download'):
                 shutil.move(os.path.join(from_location,files), os.path.join(to_location,'US', '_Move_here_after_SOX'))
             else:
                 shutil.move(os.path.join(from_location,files), os.path.join(to_location,'UK', '_Move_here_after_SOX'))
+    elif type=='QA_Extraction':
+        for files in os.listdir(from_location):
+            if files.endswith('.csv') and 'Accents-QA' in files:
+                time_format = time.gmtime(os.path.getmtime(os.path.join(from_location,files)))
+                if str(time_format.tm_year)+'-'+str(time_format.tm_mon).zfill(2)+'-'+str(time_format.tm_mday) == today:
+                    shutil.move(os.path.join(from_location,files), to_location)    
     if type=='Download':
         return (files_to_download)
 
-
+def remove_files(location):
+    for files in os.listdir(location):
+        os.unlink(os.path.join(location, files))
