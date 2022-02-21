@@ -67,12 +67,12 @@ def create_JSONS(full_data):
     data['additionalMetadata']['backgroundNoise'] = full_data['backgroundNoise'][rownum]
     data['additionalMetadata']['speechType'] = str(full_data['speechType'][rownum]).rstrip()
     data['additionalMetadata']['accentLevel'] = full_data['accentLevel'][rownum]
-    data['additionalMetadata']['surveyQuestion1'] = full_data['surveyQuestion1'][rownum]
-    data['additionalMetadata']['surveyQuestion2'] = full_data['surveyQuestion2'][rownum]
+    data['additionalMetadata']['surveyQuestion1'] = str(full_data['surveyQuestion1'][rownum])
+    data['additionalMetadata']['surveyQuestion2'] = str(full_data['surveyQuestion2'][rownum])
     data['additionalMetadata']['surveyQuestion3'] = str(full_data['surveyQuestion3'][rownum])
-    data['additionalMetadata']['surveyQuestion4'] = full_data['surveyQuestion4'][rownum]
-    data['additionalMetadata']['surveyQuestion4a'] = full_data['surveyQuestion4a'][rownum]
-    data['additionalMetadata']['surveyQuestion5'] = full_data['surveyQuestion5'][rownum]
+    data['additionalMetadata']['surveyQuestion4'] = str(full_data['surveyQuestion4'][rownum])
+    data['additionalMetadata']['surveyQuestion4a'] = str(full_data['surveyQuestion4a'][rownum])
+    data['additionalMetadata']['surveyQuestion5'] = str(full_data['surveyQuestion5'][rownum])
 
     if data['sessionLocalStartTime'] == "None" or data['sessionLocalStartTime'] == "" or data['sessionLocalStartTime'] == None:
       break

@@ -73,11 +73,11 @@ def pushToGSheet(location, questionnaire, recordings):
                 column18.append(Cell(row,33, value=''.join(recording_details[8].upper() if len(recording_details) == 10 else recording_details[5])))
                 column19.append(Cell(row,36, value=''.join(recording_details[7].split(' ')[0] if len(recording_details) == 10 else recording_details[4].split(' ')[0])))
                 column20.append(Cell(row,42, value=''.join(responses[0][0])))
-                column21.append(Cell(row,43, value=''.join(responses[0][1])))
-                column22.append(Cell(row,44, value=''.join(responses[0][2])))
-                column23.append(Cell(row,45, value=''.join(responses[0][3])))
-                column24.append(Cell(row,46, value=''.join(responses[0][4])))
-                column25.append(Cell(row,47, value=''.join(responses[0][5])))
+                column21.append(Cell(row,43, value=''.join(str(responses[0][1]))))
+                column22.append(Cell(row,44, value=''.join(str(responses[0][2]))))
+                column23.append(Cell(row,45, value=''.join(str(responses[0][3]))))
+                column24.append(Cell(row,46, value=''.join(str(responses[0][4]))))
+                column25.append(Cell(row,47, value=''.join(str(responses[0][5]))))
                 column26.append(Cell(row,48, value=''.join(recording_details[9] if len(recording_details) == 10 else recording_details[6])))
 
             
