@@ -20,6 +20,7 @@ JSON_creds = 'Bot_Creds.json'
 Gsheet_UK = '116_EN_UK_Accents'
 Gsheet_US = '116_EN_US_Accents'
 work_sheet = 'Projects_Allocation'
+new_data = False
 
 chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
                                       # and if it doesn't exist, download it automatically,
@@ -79,20 +80,20 @@ def getLiveData():
         slim_list = list(zip(df['Assigned to Ref ID'],df['Rec Task URL'],df['Questionnaire URL'], df['Progress Rec Task'], df['Progress Questionnaire'], df['Status'], df['Date Download'], df['Soxed'], df['S3']))
         accessWebPages(slim_list, loc)
     driver.quit()
-    #Moving CSVs to Server
-    csv_audio_to_download = move_files(downloadFolder, targetFolder)
-    #Download Audios
-    call_multiple_threads(csv_audio_to_download)
-    #SOX all files
-    print('Soxing Files')
-    runSOX('./Downloaded')
-    #Move SOXed files to Server
-    move_files('FilesSoxed', Sox_targetFolder, type='Upload_Sox')
-    print('Soxed files pushed to server')
-    #Move Originals to Server
-    move_files('Downloaded', Audio_targetFolder, type='Upload_Original')
-    print('Original files pushed to server')
-    #Upload audios to S3
+    if new_data:
+        #Moving CSVs to Server
+        csv_audio_to_download = move_files(downloadFolder, targetFolder)
+        #Download Audios
+        call_multiple_threads(csv_audio_to_download)
+        #SOX all files
+        print('Soxing Files')
+        runSOX('./Downloaded')
+        #Move SOXed files to Server
+        move_files('FilesSoxed', Sox_targetFolder, type='Upload_Sox')
+        print('Soxed files pushed to server')
+        #Move Originals to Server
+        move_files('Downloaded', Audio_targetFolder, type='Upload_Original')
+        print('Original files pushed to server')
 
 def login_to_platform():
     #Accesing SaaS
@@ -138,6 +139,7 @@ def scrapeProject(input_url):
                     time.sleep(2)
                     csv_btn = driver.find_element_by_class_name('dropdown-item').click()
                     dates.append(str(datetime.today()).split()[0])
+                    new_data = True
                     break
                 except NoSuchElementException:
                     print('Retrying to download CSV')
