@@ -20,7 +20,6 @@ JSON_creds = 'Bot_Creds.json'
 Gsheet_UK = '116_EN_UK_Accents'
 Gsheet_US = '116_EN_US_Accents'
 work_sheet = 'Projects_Allocation'
-new_data = False
 
 chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
                                       # and if it doesn't exist, download it automatically,
@@ -80,7 +79,7 @@ def getLiveData():
         slim_list = list(zip(df['Assigned to Ref ID'],df['Rec Task URL'],df['Questionnaire URL'], df['Progress Rec Task'], df['Progress Questionnaire'], df['Status'], df['Date Download'], df['Soxed'], df['S3']))
         accessWebPages(slim_list, loc)
     driver.quit()
-    if new_data:
+    try:
         #Moving CSVs to Server
         csv_audio_to_download = move_files(downloadFolder, targetFolder)
         #Download Audios
@@ -94,6 +93,8 @@ def getLiveData():
         #Move Originals to Server
         move_files('Downloaded', Audio_targetFolder, type='Upload_Original')
         print('Original files pushed to server')
+    except Exception:
+        print('No new data available')
 
 def login_to_platform():
     #Accesing SaaS
@@ -119,7 +120,6 @@ def accessWebPages(URLs, locale):
     #driver.quit()
 
 def scrapeProject(input_url):
-
     if input_url[0] !='' and input_url[5] != 'Complete' and input_url[5] != 'Complete Only Rec':
         while True:
             try:
@@ -139,7 +139,6 @@ def scrapeProject(input_url):
                     time.sleep(2)
                     csv_btn = driver.find_element_by_class_name('dropdown-item').click()
                     dates.append(str(datetime.today()).split()[0])
-                    new_data = True
                     break
                 except NoSuchElementException:
                     print('Retrying to download CSV')
@@ -176,6 +175,7 @@ def scrapeProject(input_url):
         list_recording_completion.append('0%')
         list_questionnaire_completion.append('0%')
         dates.append(str(input_url[6]))
+
  
     return(zip(list_recording_completion, list_questionnaire_completion, dates))
 
