@@ -64,7 +64,7 @@ def move_files(from_location, to_location, type='Download'):
         for files in os.listdir(from_location):
             if files.endswith('.csv') and 'Accents-QA' in files:
                 time_format = time.gmtime(os.path.getmtime(os.path.join(from_location,files)))
-                if str(time_format.tm_year)+'-'+str(time_format.tm_mon).zfill(2)+'-'+str(time_format.tm_mday) == today:
+                if str(time_format.tm_year)+'-'+str(time_format.tm_mon).zfill(2)+'-'+str(time_format.tm_mday).zfill(2) == today:
                     shutil.move(os.path.join(from_location,files), to_location)    
     if type=='Download':
         return (files_to_download)
