@@ -45,7 +45,7 @@ def move_files(from_location, to_location, type='Download'):
             if files.endswith('.csv') and 'Accents' in files:
                 time_format = time.gmtime(os.path.getmtime(os.path.join(from_location,files)))
                 destination_folder = os.path.join(to_location, files.split('-')[4][2:])
-                if str(time_format.tm_year)+'-'+str(time_format.tm_mon).zfill(2)+'-'+str(time_format.tm_mday) == today:
+                if str(time_format.tm_year)+'-'+str(time_format.tm_mon).zfill(2)+'-'+str(time_format.tm_mday).zfill(2) == today:
                     shutil.move(os.path.join(from_location,files), destination_folder)
                     #Saving the list of files to then launch multithread download
                     files_to_download.append(os.path.join(destination_folder, files))
