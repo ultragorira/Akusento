@@ -17,8 +17,10 @@ def pushToGSheet(location, questionnaire, recordings):
     collectionID = 'FI-en-US-Vendor'
 
     list_questionnaire = pd.read_csv(questionnaire)
+    list_questionnaire.fillna('', inplace=True)
     responses = list(zip(list_questionnaire['output1'],list_questionnaire['output2'], list_questionnaire['output3'], list_questionnaire['output4'], list_questionnaire['output5'], list_questionnaire['output6']))
     recording_details = pd.read_csv(recordings)['output1'][0].split(';')
+    lang_recorded = 'en-US' if pd.read_csv(recordings)['key'][0][-4:] == 'enUS' else 'en-GB' 
     files = [f for f in os.listdir(location) if os.path.isfile(os.path.join(location,f))]
 
     row = 2
@@ -67,7 +69,7 @@ def pushToGSheet(location, questionnaire, recordings):
                 column12.append(Cell(row,12, value=''.join(str(track.duration))))
                 column13.append(Cell(row,13, value=''.join(str.upper(media_info.tracks[0].file_extension))))
                 column14.append(Cell(row,14,value=''.join('Mobile')))
-                column15.append(Cell(row,15, value=''.join('en-US')))
+                column15.append(Cell(row,15, value=''.join(lang_recorded)))
                 column16.append(Cell(row,19, value=''.join('en')))
                 column17.append(Cell(row,20, value=''.join('Default Audio Device')))
                 column18.append(Cell(row,33, value=''.join(recording_details[8].upper() if len(recording_details) == 10 else recording_details[5])))

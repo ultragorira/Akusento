@@ -1,13 +1,11 @@
 import os.path
 import io
-from cv2 import merge
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 from pathlib import Path
 
-from pytest import skip
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
@@ -18,16 +16,16 @@ headers= ['Payment Type','Payment Period ID','Email Address','First Name','Last 
 'Workday Project Name','Pmt Method','Bank Name','Institution Number or Swift',
 'Routing Transit Number','Bank Account Number','IBAN','Beneficiary Name',
 'Address Line 1 for Wire','Address Line 2 for Wire','City for Wire','Province for Wire',
-'Country for Wire','Wire Comment for Wire'
-]
+'Country for Wire','Wire Comment for Wire']
 
 def main():
     folderId = input('Give folder ID: ')
     creds = ServiceAccountCredentials.from_json_keyfile_name(JSON_creds, SCOPES)
     service = build('drive', 'v3', credentials=creds)
-    #folderId = "1V4MGXIOWhl2uMYjMIDY7LCyHQ429N0A5"
     downloadFolder(service, folderId, destinationFolder)
-
+    print('All files downloaded. Merging data')
+    concatenate_data()
+    print('Merged file available.')
 
 def downloadFolder(service, fileId, destinationFolder):
     if not os.path.isdir(destinationFolder):
@@ -81,26 +79,35 @@ def downloadFile(service, itemName, fileId, itemType, itemExtension, filePath):
         fh.close()
 
 def concatenate_data():
-
-    merged_df = []
     p = Path(destinationFolder)
     files = p.glob('*.xlsx')
     #Cannot use concat as the files have different headers...
     #df = pd.concat([pd.read_excel(file, usecols='A:W') if len(pd.ExcelFile(file).sheet_names) == 1 else pd.read_excel(file, sheet_name='Template', usecols='A:W') for file in files], sort=False)
-    df = [pd.read_excel(file, usecols='A:W') if len(pd.ExcelFile(file).sheet_names) == 1 else pd.read_excel(file, sheet_name='Template', usecols='A:W') for file in files]
-    writer = pd.ExcelWriter(r'Downloaded/merged.xlsx', engine='xlsxwriter')
+    dtype_dic= {'Bank Account Number': str, 
+            'Routing Transit Number' : str,
+            'IBAN' : str,
+            'Payment amount': float}
+    df = [pd.read_excel(file, usecols='A:W', dtype=dtype_dic) if len(pd.ExcelFile(file).sheet_names) == 1 else pd.read_excel(file, sheet_name='Template', usecols='A:W', dtype=dtype_dic) for file in files]    
     for data in df:
+        #Renaming properly all columns by index
         for j in range(len(headers)-1):
             data.rename(columns={data.columns[j]: headers[j]}, inplace=True)
-            data.dropna(how='all', inplace=True)
+            #Trimming if string, accessing by index
+            if data.iloc[:,j].dtype == 'O':
+                data.iloc[:,j] = data.iloc[:,j].str.strip()
+        #Capitalizing first letters of each word for FN, LN and Beneficiary
+        data['First Name'] = data['First Name'].str.title()
+        data['Last Name'] = data['Last Name'].str.title()
+        data['Beneficiary Name'].fillna('', inplace=True)
+        data['Beneficiary Name'] = data['Beneficiary Name'].str.title()
+        data.dropna(how='all', inplace=True)
     concatenated_data = pd.concat([subset for subset in df])
+    write_report(concatenated_data)
+
+def write_report(concatenated_data):
+    writer = pd.ExcelWriter(r'merged.xlsx', engine='xlsxwriter')
     concatenated_data.to_excel(writer, index=False, sheet_name='Merged_Data')
-    workbook = writer.book
-    worksheet = writer.sheets['Merged_Data']
-    cell_format = workbook.add_format()
-    cell_format.set_num_format(0)
-    worksheet.set_column('O:O', None, cell_format)
     writer.save()
 
-#main()
-concatenate_data()
+main()
+#concatenate_data()
