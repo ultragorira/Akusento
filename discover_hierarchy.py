@@ -41,5 +41,6 @@ def retrieve_permissions(service, files):
     permissions = service.permissions().list(fileId=file['id'],
         fields='*',
         supportsAllDrives=True).execute()
-    
+
+    print(permissions)  
 main()
